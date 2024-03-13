@@ -162,3 +162,4 @@ CREATE TABLE IF NOT EXISTS working_with
         ON DELETE CASCADE,
     PRIMARY KEY (theater_play_id, contributor_id)
 );
+
