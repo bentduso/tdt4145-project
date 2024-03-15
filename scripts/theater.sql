@@ -250,7 +250,7 @@ VALUES (1, 'Yury Butusov', '+4774764929', 'yury.butusov@trondelag-teater.no', 'F
        (6, 'David Ghert', '+4757089131', 'david.ghert@trondelag-teater-no', 'Part-time', 'Scenography & Costumes'),
        (7, 'Gaute Trønder', '+4775239148', 'gaute.tronder@trondelag-teater.no', 'Voluntary', 'Music Director'),
        (8, 'Magnus Mikaelsen', '+4741198148', 'magnus.mikaelsen@trondelag_teater.no', 'Part-time', 'Lighting Design'),
-       (9, 'Kristoffer Spender', '+4774764921', 'kristoffer.spender@trondelag-teater.no', 'Hired', 'Dramaturgy');
+       (9, 'Kristoffer Spender', '+4774764647', 'kristoffer.spender@trondelag-teater.no', 'Hired', 'Dramaturgy');
 
 INSERT INTO working_with(theater_play_id, contributor_id)
 VALUES (1, 1),
@@ -316,7 +316,6 @@ VALUES (1, 1, 1),
        (2, 1, 19),
        (2, 1, 20),
        (2, 1, 21);
-
 
 INSERT INTO played_by(role_id, performer_id)
 VALUES (1, 1),
