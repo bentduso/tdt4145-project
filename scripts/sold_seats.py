@@ -1,6 +1,6 @@
 import sqlite3
 from datetime import datetime
-conn = sqlite3.connect('db.sqlite3')
+conn = sqlite3.connect('theater.sql')
 cursor = conn.cursor()
 transaction_id = 1  
 def process_sold_seats(file_path, hall_id, theater_play_id):
