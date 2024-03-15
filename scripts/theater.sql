@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS customer
 
 CREATE TABLE IF NOT EXISTS show
 (
-    show_date       TEXT PRIMARY KEY,
+    show_date       TEXT NOT NULL,
     theater_play_id INTEGER NOT NULL,
     FOREIGN KEY (theater_play_id) REFERENCES theater_play (theater_play_id)
         ON UPDATE CASCADE
