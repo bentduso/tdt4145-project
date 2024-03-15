@@ -34,10 +34,31 @@ CREATE TABLE IF NOT EXISTS role
     name    TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS performer
+(
+    performer_id    INTEGER PRIMARY KEY,
+    name            TEXT NOT NULL,
+    email           TEXT NOT NULL UNIQUE,
+    employee_status TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS played_by
+(
+    role_id      INTEGER NOT NULL,
+    performer_id INTEGER NOT NULL,
+    FOREIGN KEY (role_id) REFERENCES role (role_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (performer_id) REFERENCES performer (performer_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS ticket_group
 (
-    ticket_group_name INTEGER NOT NULL,
+    ticket_group_name TEXT    NOT NULL,
     theater_play_id   INTEGER NOT NULL,
+    price             INTEGER NOT NULL,
     FOREIGN KEY (theater_play_id) REFERENCES theater_play (theater_play_id)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
@@ -69,26 +90,6 @@ CREATE TABLE IF NOT EXISTS plays_act
     PRIMARY KEY (act_number, theater_play_id, role_id)
 );
 
-CREATE TABLE IF NOT EXISTS played_by
-(
-    role_id      INTEGER NOT NULL,
-    performer_id INTEGER NOT NULL,
-    FOREIGN KEY (role_id) REFERENCES role (role_id)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    FOREIGN KEY (performer_id) REFERENCES performer (performer_id)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS performer
-(
-    performer_id    INTEGER PRIMARY KEY,
-    name            TEXT NOT NULL,
-    email           TEXT NOT NULL UNIQUE,
-    employee_status TEXT NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS contributor
 (
     contributor_id  INTEGER PRIMARY KEY,
@@ -109,7 +110,7 @@ CREATE TABLE IF NOT EXISTS customer
 
 CREATE TABLE IF NOT EXISTS show
 (
-    show_date       TEXT PRIMARY KEY,
+    show_date       TEXT    NOT NULL,
     show_time       TEXT    NOT NULL,
     theater_play_id INTEGER NOT NULL,
     FOREIGN KEY (theater_play_id) REFERENCES theater_play (theater_play_id)
@@ -339,3 +340,16 @@ VALUES (1, 1),
        (19, 17),
        (20, 18),
        (21, 19);
+
+INSERT INTO ticket_group(ticket_group_name, theater_play_id, price)
+VALUES ('Ordinary', 1, 450),
+       ('Senior', 1, 380),
+       ('Student', 1, 280),
+       ('Group 10', 1, 420),
+       ('Group Senior 10', 1, 360),
+       ('Ordinary', 2, 350),
+       ('Senior', 2, 300),
+       ('Student', 2, 220),
+       ('Child', 2, 220),
+       ('Group 10', 2, 320),
+       ('Group Senior 10', 2, 270);
