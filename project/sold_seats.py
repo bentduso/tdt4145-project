@@ -50,6 +50,6 @@ def process_sold_seats(file_path, hall_id, theater_play_id):
 
 
     
-process_sold_seats('../project/hovedscenen.txt', 1, 1)
-process_sold_seats('../project/gamle-scene.txt', 2, 2)
+process_sold_seats('../data/hovedscenen.txt', 1, 1)
+process_sold_seats('../data/gamle-scene.txt', 2, 2)
 conn.close()
