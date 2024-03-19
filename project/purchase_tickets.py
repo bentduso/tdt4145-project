@@ -17,7 +17,7 @@ def buy_tickets(conn, name, show_date):
         WHERE is_available = 1
             AND theater_play.name = ?
             AND show.show_date = ?
-        GROUP BY chair_row, area
+        GROUP BY area, chair_row
         HAVING COUNT(*) >= 9
         LIMIT 1
         """,
