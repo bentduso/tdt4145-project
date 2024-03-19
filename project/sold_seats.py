@@ -46,7 +46,7 @@ def handle_ticket_and_transaction(conn, show_date, theater_play_id, transaction_
         """
         INSERT INTO ticket (show_date, theater_play_id, transaction_id, ticket_group_name,
                             chair_number, chair_row, area)
-        VALUES (?, ?, ?, 'Voksen', ?, ?, ?)
+        VALUES (?, ?, ?, 'Ordinary', ?, ?, ?)
         """,
         (show_date, theater_play_id, transaction_id, chair_number, current_row, current_area))
 
@@ -61,8 +61,8 @@ def handle_ticket_and_transaction(conn, show_date, theater_play_id, transaction_
 
 
 def process_sold_seats(conn, file_path, hall_id, theater_play_id):
+    global transaction_id
     file_lines, show_date = read_file_data(file_path)
-    transaction_id = 1
     current_area = ""
     current_row = 0
     current_date = datetime.now().strftime("%Y-%m-%d")
@@ -82,7 +82,6 @@ def process_sold_seats(conn, file_path, hall_id, theater_play_id):
                                                   current_row, current_area, current_date, current_time)
                     transaction_id += 1
 
-
 def main():
     conn = create_connection('../database/theater.db')
 
@@ -95,4 +94,5 @@ def main():
 
 
 if __name__ == '__main__':
+    transaction_id = 1
     main()
