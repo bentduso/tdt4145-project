@@ -10,7 +10,7 @@ def kjop_billetter(database_path, name, show_date):
 
     # Finn en rad med minst 9 ledige stoler
     cursor.execute("""
-        SELECT chair_row
+        SELECT chair_row, area
         FROM chair INNER JOIN theater_play ON chair.hall_id = theater_play.hall_id INNER JOIN show ON theater_play.theater_play_id = show.theater_play_id
         WHERE is_available = 1 AND theater_play.name = ? AND show.show_date = ?
         GROUP BY chair_row
@@ -19,6 +19,7 @@ def kjop_billetter(database_path, name, show_date):
     """, (name, show_date))
 
     row = cursor.fetchone()
+    print(row)
     if row:
         chair_row = row[0]
         print(chair_row)
@@ -27,9 +28,9 @@ def kjop_billetter(database_path, name, show_date):
         cursor.execute("""
             SELECT chair_number, area
             FROM chair
-            WHERE is_available = 1 
+            WHERE is_available = 1 AND chair_row = ? AND area = ?
             LIMIT 9
-        """, )
+        """, (chair_row, row[1]))
 
         chairs = cursor.fetchall()
         for chair in chairs:
