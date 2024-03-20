@@ -35,10 +35,10 @@ def buy_tickets(conn, name, show_date):
             """,
             (chair_row, row[1]))
         chairs = cursor.fetchall()
-        print("Tickets bought for chairs:")
+        print("Tickets bought for:")
         for chair in chairs:
             create_seat_transaction(cursor, chair, chair_row, name, show_date, current_date, current_time)
-            print(chair)
+            print("chair", chair[0], "in area", chair[1], "row", chair[2])
         print("Total price:", total_price, "NOK")
     else:
         print("There are no rows with 9 or more available chairs.")
