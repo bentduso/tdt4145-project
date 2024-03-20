@@ -14,6 +14,7 @@ def create_connection(database_filepath):
         conn = sqlite3.connect(database_filepath)
     except Error as e:
         print(e)
+
     return conn
 
 
@@ -39,6 +40,7 @@ def read_file_data(file_path):
                 if len(word) == 10 and word[4] == "-" and word[7] == "-":
                     show_date = word
                     break
+                    
     return file_lines, show_date
 
 
@@ -55,3 +57,20 @@ def execute_query(conn, query, params):
     cursor = conn.cursor()
     cursor.execute(query, params)
     conn.commit()
+
+
+def list_to_string(lst):
+    """
+    Converts a list to a string representation.
+    Each element in the list is separated using a comma and
+    the word 'and' is used before the last element.
+
+    :param lst: The list to be converted to a string.
+    :return: The string representation of the list.
+    """
+    if len(lst) == 0:
+        return ""
+    elif len(lst) == 1:
+        return lst[0]
+    else:
+        return ', '.join(lst[:-1]) + " and " + lst[-1]
