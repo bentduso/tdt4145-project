@@ -7,7 +7,7 @@ def buy_tickets(conn, name, show_date):
     cursor = conn.cursor()
     current_date = datetime.now().strftime("%Y-%m-%d")
     current_time = datetime.now().strftime("%H:%M:%S")
-    global total_price    
+    global total_price
     cursor.execute(
         """
         SELECT chair_row, area
@@ -37,7 +37,8 @@ def buy_tickets(conn, name, show_date):
         chairs = cursor.fetchall()
         print("Tickets bought for:")
         for chair in chairs:
-            create_seat_transaction(cursor, chair, chair_row, name, show_date, current_date, current_time)
+            create_seat_transaction(
+                cursor, chair, chair_row, name, show_date, current_date, current_time)
             print("chair", chair[0], "in area", chair[1], "row", chair[2])
         print("Total price:", total_price, "NOK")
     else:
@@ -82,7 +83,7 @@ def create_seat_transaction(cursor, chair, chair_row, name, show_date, current_d
         """
         INSERT INTO ticket (show_date, theater_play_id, transaction_id, ticket_group_name, chair_number, chair_row,
                             area) 
-        VALUES (?, ?, ?, 'Voksen', ?, ?, ?)
+        VALUES (?, ?, ?, 'Ordinary', ?, ?, ?)
         """,
         (show_date, theater_play_id, transaction_id, chair_number, chair_row, area))
 
@@ -95,12 +96,12 @@ def create_seat_transaction(cursor, chair, chair_row, name, show_date, current_d
             AND area = ?
         """,
         (chair_row, chair_number, area))
-    
+
     cursor.execute(
         """
         SELECT price
         FROM ticket_group
-        WHERE ticket_group_name = "Ordinary" AND theater_play_id = ?
+        WHERE ticket_group_name = 'Ordinary' AND theater_play_id = ?
         GROUP BY ticket_group_name
         """,
         (theater_play_id,))
@@ -108,17 +109,18 @@ def create_seat_transaction(cursor, chair, chair_row, name, show_date, current_d
 
     cursor.connection.commit()
 
+
 def main():
     conn = create_connection('../database/theater.db')
 
     if conn is not None:
         buy_tickets(conn, 'Størst av alt er kjærligheten', '2024-02-03')
-        
+
         conn.close()
     else:
         print('Error! Cannot establish a database connection.')
 
+
 if __name__ == '__main__':
     total_price = 0
     main()
-    
