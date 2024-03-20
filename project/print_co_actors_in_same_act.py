@@ -61,17 +61,17 @@ def print_co_actors_in_same_act(performer_name):
     if len(co_actors) == 0:
         print(f"The actor {performer_name} has not played in any common acts with other actors.")
     else:
-        co_actors_list = list_to_string(sorted(list(co_actors)))
-        plays_str = ", ".join(sorted(list(plays)))
-        print(
-            f"The actor {performer_name} played in the same act(s) "
-            f"as the other actors {co_actors_list} in '{plays_str}'.")
+        co_actors_list = "\n* ".join(sorted(list(co_actors)))
+        plays_str = list_to_string(list(plays))
+        print(f"The actor {performer_name} has played in the same act(s) as the other actors:\n\n"
+              f"* {co_actors_list}"
+              f"\n\nin {plays_str}.")
 
     conn.close()
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
+    if len(sys.argv) == 2:
         print_co_actors_in_same_act(sys.argv[1])
     else:
         print("Please provide the name of a performer as an argument.")
