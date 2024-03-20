@@ -28,7 +28,7 @@ def buy_tickets(conn, name, show_date):
         chair_row = row[0]
         cursor.execute(
             """
-            SELECT chair_number, area, chair_row
+            SELECT DISTINCT chair_number, area, chair_row
             FROM chair
             WHERE is_available = 1 AND chair_row = ? AND area = ?
             LIMIT 9
