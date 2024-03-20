@@ -1,5 +1,7 @@
+import os
 import sqlite3
 from datetime import datetime
+script_dir = os.path.dirname(os.path.realpath(__file__))
 conn = sqlite3.connect('theater.db')
 cursor = conn.cursor()
 transaction_id = 1  
@@ -48,8 +50,15 @@ def process_sold_seats(file_path, hall_id, theater_play_id):
                         conn.commit()
                         transaction_id += 1
 
+file_path_hovedscenen = os.path.join(os.path.dirname(script_dir), 'data', 'hovedscenen.txt')
+file_path_gamle_scene = os.path.join(os.path.dirname(script_dir), 'data', 'gamle-scene.txt')
 
-    
-process_sold_seats('../data/hovedscenen.txt', 1, 1)
-process_sold_seats('../data/gamle-scene.txt', 2, 2)
-conn.close()
+if os.path.isfile(file_path_hovedscenen):
+    process_sold_seats(file_path_hovedscenen, 1, 1)
+else:
+    print("File not found:", file_path_hovedscenen)
+
+if os.path.isfile(file_path_gamle_scene):
+    process_sold_seats(file_path_gamle_scene, 2, 2)
+else:
+    print("File not found:", file_path_gamle_scene)
