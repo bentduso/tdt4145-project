@@ -111,7 +111,7 @@ def create_seat_transaction(cursor, chair, chair_row, name, show_date, current_d
 
 
 def main():
-    conn = create_connection('../database/theater.db')
+    conn = create_connection('database/theater.db')
 
     if conn is not None:
         buy_tickets(conn, 'Størst av alt er kjærligheten', '2024-02-03')

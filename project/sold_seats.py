@@ -83,11 +83,11 @@ def process_sold_seats(conn, file_path, hall_id, theater_play_id):
                     transaction_id += 1
 
 def main():
-    conn = create_connection('../database/theater.db')
+    conn = create_connection('database/theater.db')
 
     if conn is not None:
-        process_sold_seats(conn, '../data/hovedscenen.txt', 1, 1)
-        process_sold_seats(conn, '../data/gamlescenen.txt', 2, 2)
+        process_sold_seats(conn, 'data/hovedscenen.txt', 1, 1)
+        process_sold_seats(conn, 'data/gamlescenen.txt', 2, 2)
         conn.close()
     else:
         print('Error! Cannot establish a database connection.')
