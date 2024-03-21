@@ -1,6 +1,6 @@
-import sqlite3
+from utils import create_connection
 
-conn = sqlite3.connect('theater.db')
+conn = create_connection('../database/theater.db')
 cursor = conn.cursor()
 
 # Dato input
@@ -23,8 +23,12 @@ query = """
 cursor.execute(query, (date,))
 
 results = cursor.fetchall()
-for row in results:
-    performance_name, sold_tickets = row
-    print(f"Stykke: {performance_name}, Antall solgte billetter: {sold_tickets} stk.")
+
+if len(results) == 0:
+    print("Ingen solgte billetter for den angitte datoen.")
+else:
+    for row in results:
+        performance_name, sold_tickets = row
+        print(f"Stykke: {performance_name}, Antall solgte billetter: {sold_tickets} stk.")
 
 conn.close()
