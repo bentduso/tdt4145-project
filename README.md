@@ -50,7 +50,7 @@ For å skrive ut hvilke forestillinger som finnes på en gitt dato, hvor mange b
 samt liste opp hvor mange seter som er solgt, bruk følgende kommando:
 
 ```bash
-python3 project/sold_tickets_date.py "YYYY-MM-DD"
+python3 project/sold_tickets_date.py "2024-02-03"
 ```
 
 ## Brukstilfelle 5
@@ -74,7 +74,7 @@ sqlite3 database/theater.db < project/retrieve_top_selling_shows.sql
 For å ta et skuespillernavn og finne hvilke skuespillere de har delt scene med i samme akt, kjør følgende kommando:
 
 ```bash
-python3 project/print_co_actors_in_same_act.py {{skuespillernavn}}
+python3 project/print_co_actors_in_same_act.py "Arturo Scotti"
 ```
 
 
