@@ -1,6 +1,6 @@
 from utils import create_connection
 
-conn = create_connection('../database/theater.db')
+conn = create_connection('database/theater.db')
 cursor = conn.cursor()
 
 # Dato input

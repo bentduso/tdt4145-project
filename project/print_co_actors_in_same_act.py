@@ -4,7 +4,7 @@ from utils import create_connection, list_to_string
 
 
 def print_co_actors_in_same_act(performer_name):
-    conn = create_connection('../database/theater.db')
+    conn = create_connection('database/theater.db')
 
     if conn is None:
         print("Error! Cannot create a connection to database.")
