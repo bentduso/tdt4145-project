@@ -63,15 +63,12 @@ def handle_ticket_and_transaction(conn, show_date, theater_play_id, transaction_
 def process_sold_seats(conn, file_path, hall_id, theater_play_id, reverse_seats=False):
     global transaction_id
     file_lines, show_date = read_file_data(file_path)
-    current_area = ""
-    current_row = 0
     current_date = datetime.now().strftime("%Y-%m-%d")
     current_time = datetime.now().strftime("%H:%M:%S")
 
-    # Calculate total number of seats if reverse_seats is True
-    total_seats = None
     if reverse_seats:
-        total_seats = sum(len(line.strip()) for line in file_lines if line.strip() not in ["Galleri", "Balkong", "Parkett", "Dato 2024-02-03"])
+        total_seats = sum(len(line.strip()) for line in file_lines if line.strip() not in [
+                          "Galleri", "Balkong", "Parkett", "Dato 2024-02-03"])
 
     area_row_counts = {}
     current_area = ""
@@ -93,19 +90,23 @@ def process_sold_seats(conn, file_path, hall_id, theater_play_id, reverse_seats=
             current_row_counts[current_area] = area_row_counts[current_area]
         elif line and current_area:
             current_row = current_row_counts[current_area]
+            line_length = len(
+                [seat for seat in line if seat in ('0', '1', 'x')])
             if reverse_seats and total_seats is not None:
-                # Create seat numbers in reverse without resetting between rows
-                seat_numbers = range(total_seats, total_seats - len(line), -1)
-                total_seats -= len(line)
+                seat_numbers = range(
+                    total_seats - line_length + 1, total_seats + 1)
+                total_seats -= line_length
             else:
-                seat_numbers = range(1, len(line) + 1)
+                seat_numbers = range(1, line_length + 1)
 
             for chair_number, seat in zip(seat_numbers, line):
-                handle_seat_availability(conn, hall_id, current_area, current_row, chair_number, seat)
-                if seat == '1':
-                    handle_ticket_and_transaction(conn, show_date, theater_play_id, transaction_id, chair_number,
-                                                  current_row, current_area, current_date, current_time)
-                    transaction_id += 1
+                if seat in ('0', '1'):
+                    handle_seat_availability(
+                        conn, hall_id, current_area, current_row, chair_number, seat)
+                    if seat == '1':
+                        handle_ticket_and_transaction(conn, show_date, theater_play_id, transaction_id, chair_number,
+                                                      current_row, current_area, current_date, current_time)
+                        transaction_id += 1
             current_row_counts[current_area] -= 1
 
 
