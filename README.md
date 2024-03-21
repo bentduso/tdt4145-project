@@ -1,73 +1,80 @@
-(Åpne filen i preview for et finere format)
+# Oppskrift for kjøring av prosjektet i DB2
 
-# Oppskrift for å kjøring av prosjektet i DB2
+**NB!** Alle kommandoer skal utføres fra rotmappen `tdt4145-project`.
 
-Alle kommandoer skal kjøres fra mappen "TDT4145-PROJECT"
+For å opprette tabellene i den tomme databasen `theater.db`, bruk følgende kommandoer:
 
-Start med å opprette databasen, med navn "theater.db"
 ```bash
-    $ sqlite3 database/theater.db
+sqlite3 database/theater.db
+
+# Inne i SQLite3-skallet
+.read scripts/theater_schema.sql
 ```
 
-For å konstruere databasen i sqlite3 skriv 
+## Brukstilfelle 1
+
+For å fylle databasen med definerte tabeller for teaterstoler, teaterstykker, forestillinger, akter, roller,
+skuespillere osv., kjør kommandoen:
 
 ```bash
-    .read scripts/theater_schema.sql
+.read scripts/theater_data_insert.sql
 ```
 
-## Usecase 1:
-
-Nå må du fylle databasen med predefinert data med
+Avslutt SQLite 3 med:
 
 ```bash
-    .read scripts/theater_data_insert.sql
-```
-Avslutt sqlite3 med
-```bash
-    .q
+.q
 ```
 
-## Usecase 2:
+## Brukstilfelle 2
 
-Denne kommandoen fyller inn alle seter basert på txt-filene og tilgjengelighet på datoen som er definert i txt-filene
+For å fylle inn alle seter basert på `hovedscenen.txt` og `gamlescenen.txt`, med deres tilgjengelighet og definerte
+dato, kjør følgende kommando:
+
 ```bash
-    python3 project/sold_seats.py
+python3 project/sold_seats.py
 ```
 
-## Usecase 3:
+## Brukstilfelle 3
 
-Denne kommandoen kjøper 9 ordinære billetter den 3. februar, hvor alle setter er på samme rad. Gjerne kjør den flere ganger for å se at det er reproduserbart.
+For å kjøpe 9 ordinære billetter (voksenbilletter) for den 3. februar, hvor alle setene er på samme rad, bruk følgende
+kommando:
+
 ```bash
-    python3 project/purchase_tickets.py
+python3 project/purchase_tickets.py
 ```
 
-## Usecase 4:
+## Brukstilfelle 4
 
-Denne kommandoen skriver ut hvilke forestillinger som finnes på en gitt dato og hvor mange billetter som er solgt til de
+For å skrive ut hvilke forestillinger som finnes på en gitt dato, hvor mange billetter som er solgt på denne datoen,
+samt liste opp hvor mange seter som er solgt, bruk følgende kommando:
+
 ```bash
-    python3 project/sold_tickets_date.py "2024-02-03"
+python3 project/sold_tickets_date.py "YYYY-MM-DD"
 ```
 
-## Usecase 5:
+## Brukstilfelle 5
 
-Denne kommandoen finner skuespillere som har spilt i teaterstykker
+For å finne navnene på skuespillere som opptrer i de forskjellige teaterstykkene, kjør følgende kommando:
+
 ```bash
-    sqlite3 database/theater.db < ../project/actors_in_play.sql
+sqlite3 database/theater.db < project/actors_in_play.sql
 ```
 
-## Usecase 6:
+## Brukstilfelle 6
 
-Denne kommandoen finner forestillinger som har solgt flest billetter, i synkende rekkefølge
+For å finne forestillinger som har solgt flest billetter, i synkende rekkefølge, kjør følgende kommando:
+
 ```bash
-    sqlite3 database/theater.db < ../project/retrieve_top_selling_shows.sql
+sqlite3 database/theater.db < project/retrieve_top_selling_shows.sql
 ```
 
-## Usecase 7:
+## Brukstilfelle 7
 
-Denne kommandoen finner hvilke skuespillere som har spilt sammen i samme akt, og hvilket skuespill det skjedde i. Kommandoen tar inn et navn som argument, for eksempel "Arturo Scrotti".
+For å ta et skuespillernavn og finne hvilke skuespillere de har delt scene med i samme akt, kjør følgende kommando:
 
 ```bash
-    python3 project/print_co_actors_in_same_act.py "Arturo Scotti"
+python3 project/print_co_actors_in_same_act.py {{skuespillernavn}}
 ```
 
 
