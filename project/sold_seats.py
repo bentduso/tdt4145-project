@@ -60,7 +60,7 @@ def handle_ticket_and_transaction(conn, show_date, theater_play_id, transaction_
         (transaction_id, theater_play_id, 1, show_date, current_date, current_time))
 
 
-def process_sold_seats(conn, file_path, hall_id, theater_play_id):
+def process_sold_seats(conn, file_path, hall_id, theater_play_id, reverse_seats=False):
     global transaction_id
     file_lines, show_date = read_file_data(file_path)
     current_area = ""
@@ -68,26 +68,53 @@ def process_sold_seats(conn, file_path, hall_id, theater_play_id):
     current_date = datetime.now().strftime("%Y-%m-%d")
     current_time = datetime.now().strftime("%H:%M:%S")
 
-    for line in file_lines[1:]:
+    # Calculate total number of seats if reverse_seats is True
+    total_seats = None
+    if reverse_seats:
+        total_seats = sum(len(line.strip()) for line in file_lines if line.strip() not in ["Galleri", "Balkong", "Parkett", "Dato 2024-02-03"])
+
+    area_row_counts = {}
+    current_area = ""
+    for line in file_lines:
         line = line.strip()
         if line in ["Galleri", "Balkong", "Parkett"]:
             current_area = line
-            current_row = 0
-        elif line:
-            current_row += 1
-            for chair_number, seat in enumerate(line, start=1):
+            if current_area not in area_row_counts:
+                area_row_counts[current_area] = 0
+        elif line and current_area:
+            area_row_counts[current_area] += 1
+
+    current_area = ""
+    current_row_counts = {}
+    for line in file_lines:
+        line = line.strip()
+        if line in ["Galleri", "Balkong", "Parkett"]:
+            current_area = line
+            current_row_counts[current_area] = area_row_counts[current_area]
+        elif line and current_area:
+            current_row = current_row_counts[current_area]
+            if reverse_seats and total_seats is not None:
+                # Create seat numbers in reverse without resetting between rows
+                seat_numbers = range(total_seats, total_seats - len(line), -1)
+                total_seats -= len(line)
+            else:
+                seat_numbers = range(1, len(line) + 1)
+
+            for chair_number, seat in zip(seat_numbers, line):
                 handle_seat_availability(conn, hall_id, current_area, current_row, chair_number, seat)
                 if seat == '1':
                     handle_ticket_and_transaction(conn, show_date, theater_play_id, transaction_id, chair_number,
                                                   current_row, current_area, current_date, current_time)
                     transaction_id += 1
+            current_row_counts[current_area] -= 1
+
 
 def main():
     conn = create_connection('database/theater.db')
 
     if conn is not None:
-        process_sold_seats(conn, 'data/hovedscenen.txt', 1, 1)
-        process_sold_seats(conn, 'data/gamlescenen.txt', 2, 2)
+        process_sold_seats(conn, 'data/hovedscenen.txt', 1, 1, True)
+        process_sold_seats(conn, 'data/gamlescenen.txt', 2, 2, False)
         conn.close()
     else:
         print('Error! Cannot establish a database connection.')
