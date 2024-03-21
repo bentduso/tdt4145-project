@@ -51,7 +51,8 @@ CREATE TABLE IF NOT EXISTS played_by
         ON DELETE CASCADE,
     FOREIGN KEY (performer_id) REFERENCES performer (performer_id)
         ON UPDATE CASCADE
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    PRIMARY KEY (role_id, performer_id)
 );
 
 CREATE TABLE IF NOT EXISTS ticket_group
